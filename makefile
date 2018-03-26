@@ -8,7 +8,7 @@ LinkedArrayTest: LinkedArrayTest.o LinkedArray.o
 LinkedArrayTest.o: test/LinkedArrayTest.cxx source/LinkedArray.h
 	$(CXX) $(CXXFLAGS) $(INC) -c test/LinkedArrayTest.cxx
 
-LinkedArray.o: source/LinkedArray.cxx source/LinkedArray.h
+LinkedArray.o: source/LinkedArray.cxx source/LinkedArray.h source/Comparator.h
 	$(CXX) $(CXXFLAGS) $(INC) -c source/LinkedArray.cxx
 
 clean:

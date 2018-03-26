@@ -3,10 +3,9 @@
 
 #include "LinkedArray.h"
 
-using namespace com::github::erixmannx;
+using namespace com::github::erixmannx::LinkedArray;
 
-template class LinkedArray<int>;
-static LinkedArray<int>* linkedArray = NULL;
+static LinkedArray<int>* linkedArray = new LinkedArray<int>();
 
 int main(int argc, char** argv) {
 	printf("Hello");

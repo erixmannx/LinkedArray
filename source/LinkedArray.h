@@ -2,13 +2,14 @@
 #define COM_GITHUB_ERIXMANNX_LINKEDARRAY_LINKEDARRAY_H
 
 #include "Comparator.h"
+#include "Level.h"
 
 namespace com { namespace github { namespace erixmannx { namespace LinkedArray {
 
 template<typename T>
 class LinkedArray {
 	public:
-		const static int CHUNK_SIZE = 10;
+		const static int BLOCK_SIZE = 10;
 
 		LinkedArray();
 
@@ -21,6 +22,7 @@ class LinkedArray {
 	protected:
 		void print() const;
 
+		Level<T>* m_rootLevel;
 		Comparator<T>* m_comparator;
 };
 

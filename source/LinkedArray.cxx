@@ -3,12 +3,14 @@
 
 #include "LinkedArray.h"
 #include "Comparator.h"
+#include "Level.h"
 
 using namespace com::github::erixmannx::LinkedArray;
 
 template<typename T>
 LinkedArray<T>::LinkedArray() {
 	m_comparator = new DefaultComparator<T>();
+	m_rootLevel = new Level<T>(BLOCK_SIZE);
 }
 
 template<typename T>

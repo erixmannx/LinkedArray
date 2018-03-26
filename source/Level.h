@@ -11,6 +11,7 @@ class Level {
 	public: 
 		Level(int blockSize): 
 			m_blockSize(blockSize),
+			m_count(0),
 			m_next(NULL),
 			// TODO:
 			m_dealloc(NULL) {
@@ -19,7 +20,7 @@ class Level {
 
 		~Level() {
 			if (m_dealloc != NULL) {
-				for (int x = 0; x < m_blockSize; x++) {
+				for (int x = 0; x < m_count; x++) {
 					m_dealloc->dealloc(m_block[x]);
 				}
 			}
@@ -27,8 +28,27 @@ class Level {
 			delete [] m_block;
 		}
 
+		int getCount() const {
+			return m_count;
+		}
+
+		T get(const int location) const {
+			// translate to local locality 
+			int locality = location % m_blockSize;
+
+			return m_block[locality];
+		}
+
+		void set(const int location, const T data) {
+			// translate to local locality 
+			int locality = location % m_blockSize;
+
+			m_block[locality] = data;
+		}
+
 	private:
 		int m_blockSize;
+		int m_count;
 
 		Level<T>* m_next;
 		T* m_block;

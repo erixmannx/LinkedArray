@@ -12,18 +12,23 @@ class LinkedArray {
 		const static int BLOCK_SIZE = 10;
 
 		LinkedArray();
+		~LinkedArray();
 
 		// append elem to the end of this collection
 		bool add(const T elem);
 
 		// insert elem at index
-		void add(const int index, const T elem);
+		void add(const int index, const T data);
+		void set(const int index, const T data);
+
+		T get(const int index) const;
 
 	protected:
 		void print() const;
 
 		Level<T>* m_rootLevel;
 		Comparator<T>* m_comparator;
+		long m_count;
 };
 
 } } } } // namespace

@@ -28,6 +28,10 @@ class Level {
 			delete [] m_block;
 		}
 
+		bool full() const {
+			return (m_count == m_blockSize);
+		}
+
 		int getCount() const {
 			return m_count;
 		}
@@ -44,6 +48,10 @@ class Level {
 			int locality = location % m_blockSize;
 
 			m_block[locality] = data;
+		}
+
+		Level<T>* getNextLevel() const {
+			return m_next;
 		}
 
 	private:

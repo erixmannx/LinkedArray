@@ -4,6 +4,7 @@
 #include "LinkedArray.h"
 #include "Comparator.h"
 #include "Level.h"
+#include "SpinLock.h"
 
 using namespace com::github::erixmannx::LinkedArray;
 
@@ -29,24 +30,38 @@ LinkedArray<T>::~LinkedArray() {
 
 template<typename T>
 bool LinkedArray<T>::add(const T elem) {
-	// TODO:
+	// TODO : locking
 	return true;
 }
 
 template<typename T>
-void LinkedArray<T>::add(const int index, const T data) {
+void LinkedArray<T>::add(const long index, const T data) {
 	set(index, data);
 }
 
 template<typename T>
-void LinkedArray<T>::set(const int index, const T data) {
-	// TODO: 
+void LinkedArray<T>::set(const long index, const T data) {
+	// TODO: locking 
+
+	Level<T>* level = getTargetLevel(index);	
+	int targetLocation = index % BLOCK_SIZE;
+
+	level->set(targetLocation, data);
 }
 
 template<typename T>
-T LinkedArray<T>::get(const int index) const {
-	int targetLevel = index / BLOCK_SIZE;
+T LinkedArray<T>::get(const long index) const {
+	// TODO : locking
+
+	Level<T>* level = getTargetLevel(index);	
 	int targetLocation = index % BLOCK_SIZE;
+
+	return level->get(targetLocation);
+}
+
+template<typename T>
+Level<T>* LinkedArray<T>::getTargetLevel(const long index) const {
+	int targetLevel = index / BLOCK_SIZE;
 
 	int currentLevel = 0;
 	Level<T>* level = m_rootLevel;
@@ -54,8 +69,8 @@ T LinkedArray<T>::get(const int index) const {
 	while (currentLevel < targetLevel) {
 		level = level->getNextLevel();
 	}
-	
-	return level->get(targetLocation);
+
+	return level;
 }
 
 // move implementation to header to remove this requirement

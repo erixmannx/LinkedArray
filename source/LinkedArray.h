@@ -18,12 +18,13 @@ class LinkedArray {
 		bool add(const T elem);
 
 		// insert elem at index
-		void add(const int index, const T data);
-		void set(const int index, const T data);
+		void add(const long index, const T data);
+		void set(const long index, const T data);
 
-		T get(const int index) const;
+		T get(const long index) const;
 
 	protected:
+		Level<T>* getTargetLevel(const long index) const; 
 		void print() const;
 
 		Level<T>* m_rootLevel;

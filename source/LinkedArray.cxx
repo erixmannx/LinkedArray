@@ -13,6 +13,8 @@ LinkedArray<T>::LinkedArray() :
 	m_count(0L) {
 	m_comparator = new DefaultComparator<T>();
 	m_rootLevel = new Level<T>(BLOCK_SIZE);
+
+	m_lock = new SpinLock();
 }
 
 template<typename T>
@@ -29,34 +31,46 @@ LinkedArray<T>::~LinkedArray() {
 }
 
 template<typename T>
-bool LinkedArray<T>::add(const T elem) {
-	// TODO : locking
-	return true;
+void LinkedArray<T>::add(const T data) {
+	m_lock->lock();
+	{
+		set(m_count, data, false /* lock */);
+		m_count++;
+	}
+	m_lock->unlock();
 }
 
 template<typename T>
 void LinkedArray<T>::add(const long index, const T data) {
-	set(index, data);
+	set(index, data, true /* lock */);
 }
 
 template<typename T>
-void LinkedArray<T>::set(const long index, const T data) {
-	// TODO: locking 
+void LinkedArray<T>::set(const long index, const T data, bool lock) {
+	// TODO : throw if this is past our current size
+	if (lock == true) m_lock->lock();
+	{
+		Level<T>* level = getTargetLevel(index);	
+		int targetLocation = index % BLOCK_SIZE;
 
-	Level<T>* level = getTargetLevel(index);	
-	int targetLocation = index % BLOCK_SIZE;
-
-	level->set(targetLocation, data);
+		level->set(targetLocation, data);
+	}
+	if (lock == true) m_lock->unlock();
 }
 
 template<typename T>
 T LinkedArray<T>::get(const long index) const {
-	// TODO : locking
+	// TODO : throw if this is past our current size
+	m_lock->lock();
+	//{
+		Level<T>* level = getTargetLevel(index);	
+		int targetLocation = index % BLOCK_SIZE;
 
-	Level<T>* level = getTargetLevel(index);	
-	int targetLocation = index % BLOCK_SIZE;
+		T data = level->get(targetLocation);
+	//}
+	m_lock->unlock();
 
-	return level->get(targetLocation);
+	return data;
 }
 
 template<typename T>

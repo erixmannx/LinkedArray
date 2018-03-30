@@ -3,6 +3,7 @@
 
 #include "Comparator.h"
 #include "Level.h"
+#include "SpinLock.h"
 
 namespace com { namespace github { namespace erixmannx { namespace LinkedArray {
 
@@ -15,11 +16,11 @@ class LinkedArray {
 		~LinkedArray();
 
 		// append elem to the end of this collection
-		bool add(const T elem);
+		void add(const T data);
 
 		// insert elem at index
 		void add(const long index, const T data);
-		void set(const long index, const T data);
+		void set(const long index, const T data, bool lock);
 
 		T get(const long index) const;
 
@@ -30,6 +31,8 @@ class LinkedArray {
 		Level<T>* m_rootLevel;
 		Comparator<T>* m_comparator;
 		long m_count;
+
+		SpinLock* m_lock;
 };
 
 } } } } // namespace
